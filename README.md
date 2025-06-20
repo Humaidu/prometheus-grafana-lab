@@ -6,7 +6,7 @@ This project sets up a **Prometheus + Grafana stack** using Docker Compose to co
 
 ## Architecture
 
-![Premwtheus Grafana Architecture](screenshots/grafana-premetheus-architecture.png)
+![Prometheus Grafana Architecture](screenshots/grafana-premetheus-architecture.png)
 
 ---
 
@@ -79,6 +79,79 @@ You will be prompted to change the password on first login.
 - Choose Prometheus.
 - Set the URL to: http://server-ip:9090
 - Click Save & Test.
+
+---
+
+## Creating a New Grafana Dashboard (From Tutorial)
+
+As part of the lab, we created a custom Grafana dashboard to visualize Prometheus metrics using **Stat**, **Time series**, and **Gauge** panels.
+
+### Steps to Create a Dashboard
+
+1. **Login to Grafana**
+   - Go to `http://localhost:3000` (or your EC2 IP).
+   - Login with:
+     - **Username**: `admin`
+     - **Password**: `admin` (prompted to change on first login)
+
+2. **Create a New Dashboard**
+   - Click **“+”** (left sidebar) → **Dashboard**
+   - Click **“Add new panel”**
+
+3. **Panel 1: Uptime (Stat Panel)**
+   - **Query:**
+     ```promql
+     node_time_seconds - node_boot_time_seconds
+     ```
+   - **Visualization**: Stat
+   - **Title**: “Uptime”
+   - Click **Apply**
+
+4. **Panel 2: Memory Usage (Gauge Panel)**
+   - **Query:**
+     ```promql
+     node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes
+     ```
+   - **Unit**: bytes (auto)
+   - **Thresholds**: 70% = yellow, 90% = red
+   - **Visualization**: Gauge
+   - **Title**: “Memory Usage”
+
+5. **Panel 3: Disk Usage (Gauge Panel)**
+   - **Query:**
+     ```promql
+     1 - (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"})
+     ```
+   - **Unit**: percent (0–1 or scale to 100%)
+   - **Visualization**: Gauge
+   - **Title**: “Disk Usage”
+
+6. **Panel 4: CPU Usage Over Time (Time Series Panel)**
+   - **Query:**
+     ```promql
+     100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+     ```
+   - **Visualization**: Time series
+   - **Title**: “CPU Usage Over Time”
+
+7. **Save the Dashboard**
+   - Click **Save** (💾 icon)
+   - Name it: `Node Monitoring Dashboard`
+
+### Sample Dashboard Overview
+
+Your custom dashboard should now show:
+- Uptime (stat)
+- Live memory usage (gauge)
+- Disk usage (gauge)
+- CPU usage trend (time series)
+
+![Prometheus Grafana Dashboard](screenshots/grafana-dashboard-all.png)
+
+Each panel uses metrics scraped by Prometheus from Node Exporter, making it a real-time monitoring dashboard.
+
+
+> 💡 Tip: You can export this dashboard as JSON and version-control it or reuse it across environments.
 
 ---
 
