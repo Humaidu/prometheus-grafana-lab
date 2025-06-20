@@ -24,9 +24,10 @@ This project sets up a **Prometheus + Grafana stack** using Docker Compose to co
 
 ```bash
 .
-├── docker-compose.yml
+├── compose.yml
 ├── prometheus.yml
 └── README.md
+├── screenshots
 
 ```
 
@@ -73,10 +74,10 @@ You will be prompted to change the password on first login.
 
 ## Setting Up Prometheus Data Source in Grafana
 
-- Go to http://localhost:3000
+- Go to http://server-ip:3000
 - Navigate to ⚙️ → Data Sources → Add Data Source.
 - Choose Prometheus.
-- Set the URL to: http://prometheus:9090
+- Set the URL to: http://server-ip:9090
 - Click Save & Test.
 
 ---
