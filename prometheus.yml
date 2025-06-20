@@ -1,0 +1,10 @@
+# This configuration file instructs Prometheus to scrape metrics from the node-exporter service running at port 9100 on the same Docker network
+
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: node-exporter
+    static_configs:
+      - targets:
+          - 'node-exporter:9100'
